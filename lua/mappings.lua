@@ -20,8 +20,12 @@ local excluded_paths = table.concat({
 local env_only_globs = table.concat({
   "--hidden",
   "--no-ignore",
+  "--glob '.env'",
   "--glob '.env*'",
+  "--glob '*.env'",
+  "--glob '**/.env'",
   "--glob '**/.env*'",
+  "--glob '**/*.env'",
   excluded_paths,
 }, " ")
 
@@ -41,26 +45,25 @@ local function find_files_with_env()
 end
 
 local function live_grep_with_env()
-  local search_paths = { vim.uv.cwd() }
   local env_files = vim.fn.systemlist({ "sh", "-c", env_only_find_command })
 
   if vim.v.shell_error == 0 and #env_files > 0 then
-    vim.list_extend(search_paths, env_files)
+    require("telescope.builtin").live_grep {
+      prompt_title = "Live Grep Env Files",
+      search_dirs = env_files,
+    }
   elseif vim.v.shell_error ~= 0 then
     vim.notify("Failed to enumerate .env* files for live grep", vim.log.levels.WARN)
+  else
+    vim.notify("No env files found for live grep", vim.log.levels.INFO)
   end
-
-  require("telescope.builtin").live_grep {
-    prompt_title = "Live Grep + .env*",
-    search_dirs = search_paths,
-  }
 end
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 map("n", "<leader>ff", find_files_with_env, { desc = "telescope find files + .env*" })
 map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
-map("n", "<leader>fe", live_grep_with_env, { desc = "telescope live grep + .env*" })
+map("n", "<leader>fe", live_grep_with_env, { desc = "telescope live grep env files" })
 
 -- Support an Alt-w prefix for common window commands alongside built-in <C-w>.
 map_alt_window("h", "<C-w>h", "window left")

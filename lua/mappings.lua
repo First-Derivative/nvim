@@ -4,6 +4,10 @@ require "nvchad.mappings"
 
 local map = vim.keymap.set
 
+local function map_alt_window(key, command, desc)
+  map("n", "<M-w>" .. key, command, { desc = desc })
+end
+
 local excluded_paths = table.concat({
   "--glob '!.git/**'",
   "--glob '!**/.git/**'",
@@ -27,20 +31,7 @@ local env_file_find_command = string.format(
   env_only_globs
 )
 
-local env_file_grep_command = table.concat({
-  'pattern="$1"',
-  "shift",
-  "{",
-  string.format(
-    '  rg --color=never --no-heading --with-filename --line-number --column --smart-case %s -- "$pattern" "$@"',
-    excluded_paths
-  ),
-  string.format(
-    '  rg --color=never --no-heading --with-filename --line-number --column --smart-case %s -- "$pattern" "$@"',
-    env_only_globs
-  ),
-  "} | sort -u",
-}, "; ")
+local env_only_find_command = string.format("rg --files --color never %s", env_only_globs)
 
 local function find_files_with_env()
   require("telescope.builtin").find_files {
@@ -50,15 +41,42 @@ local function find_files_with_env()
 end
 
 local function live_grep_with_env()
+  local search_paths = { vim.uv.cwd() }
+  local env_files = vim.fn.systemlist({ "sh", "-c", env_only_find_command })
+
+  if vim.v.shell_error == 0 and #env_files > 0 then
+    vim.list_extend(search_paths, env_files)
+  elseif vim.v.shell_error ~= 0 then
+    vim.notify("Failed to enumerate .env* files for live grep", vim.log.levels.WARN)
+  end
+
   require("telescope.builtin").live_grep {
-    prompt_title = "Live Grep (.env*)",
-    vimgrep_arguments = { "sh", "-c", env_file_grep_command },
+    prompt_title = "Live Grep + .env*",
+    search_dirs = search_paths,
   }
 end
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 map("n", "<leader>ff", find_files_with_env, { desc = "telescope find files + .env*" })
-map("n", "<leader>fw", live_grep_with_env, { desc = "telescope live grep + .env*" })
+map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
+map("n", "<leader>fe", live_grep_with_env, { desc = "telescope live grep + .env*" })
+
+-- Support an Alt-w prefix for common window commands alongside built-in <C-w>.
+map_alt_window("h", "<C-w>h", "window left")
+map_alt_window("j", "<C-w>j", "window down")
+map_alt_window("k", "<C-w>k", "window up")
+map_alt_window("l", "<C-w>l", "window right")
+map_alt_window("v", "<C-w>v", "window vertical split")
+map_alt_window("s", "<C-w>s", "window horizontal split")
+map_alt_window("q", "<C-w>q", "window close")
+map_alt_window("o", "<C-w>o", "window close others")
+map_alt_window(">", "<C-w>>", "window increase width")
+map_alt_window("<", "<C-w><", "window decrease width")
+map_alt_window("+", "<C-w>+", "window increase height")
+map_alt_window("-", "<C-w>-", "window decrease height")
+map_alt_window("=", "<C-w>=", "window equalize")
+map_alt_window("|", "<C-w>|", "window maximize width")
+map_alt_window("_", "<C-w>_", "window maximize height")
 
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")

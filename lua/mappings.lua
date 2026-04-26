@@ -65,6 +65,17 @@ map("n", "<leader>ff", find_files_with_env, { desc = "telescope find files + .en
 map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
 map("n", "<leader>fe", live_grep_with_env, { desc = "telescope live grep env files" })
 
+map("n", "<leader>th", function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, { desc = "toggle inlay hints" })
+map("n", "<leader>to", "<cmd>TSToolsOrganizeImports<CR>", { desc = "TS organize imports" })
+map("n", "<leader>ti", "<cmd>TSToolsAddMissingImports<CR>", { desc = "TS add missing imports" })
+map("n", "<leader>tu", "<cmd>TSToolsRemoveUnusedImports<CR>", { desc = "TS remove unused imports" })
+map("n", "<leader>tf", "<cmd>TSToolsFixAll<CR>", { desc = "TS fix all" })
+map("n", "<leader>tr", "<cmd>TSToolsFileReferences<CR>", { desc = "TS file references" })
+map("n", "<leader>tg", "<cmd>TSToolsGoToSourceDefinition<CR>", { desc = "TS go to source definition" })
+map("n", "<leader>tq", "<cmd>cclose<CR>", { desc = "close quickfix window" })
+
 -- Support an Alt-w prefix for common window commands alongside built-in <C-w>.
 map_alt_window("h", "<C-w>h", "window left")
 map_alt_window("j", "<C-w>j", "window down")

@@ -76,6 +76,10 @@ map("n", "<leader>tr", "<cmd>TSToolsFileReferences<CR>", { desc = "TS file refer
 map("n", "<leader>tg", "<cmd>TSToolsGoToSourceDefinition<CR>", { desc = "TS go to source definition" })
 map("n", "<leader>tq", "<cmd>cclose<CR>", { desc = "close quickfix window" })
 
+map("n", "<leader>mt", "<cmd>Markview toggle<CR>", { desc = "Markview: toggle buffer preview" })
+map("n", "<leader>mh", "<cmd>Markview hybridToggle<CR>", { desc = "Markview: toggle hybrid mode" })
+map("n", "<leader>ms", "<cmd>Markview splitToggle<CR>", { desc = "Markview: toggle splitview" })
+
 map("n", "<leader>de", vim.diagnostic.open_float, { desc = "diagnostic float" })
 map("n", "<leader>dq", vim.diagnostic.setqflist, { desc = "all diagnostics to quickfix" })
 map("n", "<leader>fd", "<cmd>Telescope diagnostics<CR>", { desc = "telescope diagnostics" })

@@ -76,6 +76,14 @@ map("n", "<leader>tr", "<cmd>TSToolsFileReferences<CR>", { desc = "TS file refer
 map("n", "<leader>tg", "<cmd>TSToolsGoToSourceDefinition<CR>", { desc = "TS go to source definition" })
 map("n", "<leader>tq", "<cmd>cclose<CR>", { desc = "close quickfix window" })
 
+map("n", "<leader>de", vim.diagnostic.open_float, { desc = "diagnostic float" })
+map("n", "<leader>dq", vim.diagnostic.setqflist, { desc = "all diagnostics to quickfix" })
+map("n", "<leader>fd", "<cmd>Telescope diagnostics<CR>", { desc = "telescope diagnostics" })
+map("n", "]q", "<cmd>cnext<CR>", { desc = "next quickfix" })
+map("n", "[q", "<cmd>cprev<CR>", { desc = "prev quickfix" })
+map("n", "<leader>co", "<cmd>copen<CR>", { desc = "open quickfix window" })
+map("n", "<leader>cq", "<cmd>cclose<CR>", { desc = "close quickfix window" })
+
 -- Support an Alt-w prefix for common window commands alongside built-in <C-w>.
 map_alt_window("h", "<C-w>h", "window left")
 map_alt_window("j", "<C-w>j", "window down")

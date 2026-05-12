@@ -57,6 +57,16 @@ return {
     },
   },
 
+  {
+    "nvim-tree/nvim-tree.lua",
+    opts = {
+      view = {
+        side = "right",
+        width = 50,
+      },
+    },
+  },
+
   -- test new blink
   -- { import = "nvchad.blink.lazyspec" },
 

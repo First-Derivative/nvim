@@ -13,6 +13,7 @@ A wiki of Neovim concepts as they apply to this NvChad-based config. Each page f
 - [Linting](linting.md) — diagnostics flow, why there's no linter plugin yet
 - [Diagnostics & Quickfix Hotkeys](diagnostics-quickfix.md) — navigation, code actions, undo
 - [Window Navigation](window-navigation.md) — splits, movement, resize
+- [NvimTree](nvim-tree.md) — file explorer sidebar
 
 ## Pending topics
 
